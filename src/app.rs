@@ -15,6 +15,7 @@ impl App {
     }
 }
 
+// TODO: Layout for Calculator
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
@@ -67,7 +68,9 @@ impl eframe::App for App {
                 self.calculator.push_to_equation(" / ");
             }
             if ui.button("=").clicked() {
-                self.calculator.calculate();
+                self.calculator.push_to_equation(" )");
+                let answer = self.calculator.calculate();
+                self.calculator.push_to_equation(&answer);
             }
         });
     }

@@ -4,6 +4,7 @@ extern crate eframe;
 
 mod app;
 mod calculator;
+mod operators;
 
 fn main() {
     let native_options = eframe::NativeOptions::default();
