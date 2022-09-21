@@ -1,9 +1,11 @@
 #[derive(Debug, Default)]
 pub(crate) struct Calculator {
+    /// The Equation container
     pub(crate) equation: String,
 }
 
 impl Calculator {
+    /// Generic new function
     pub fn new() -> Self {
         Self::default()
     }
@@ -15,11 +17,12 @@ impl Calculator {
         self.equation.push_str(s);
     }
 
+    // TODO: Parse floating points.
+    /// This will naively turn a string into an arithmetic equation.
+    /// In four-function mode, we can guarantee this is safe, because
+    /// the only characters that can be entered are 0-9, and the four operators.
+    /// test string: "22+4"
     pub fn calculate(&mut self) -> String {
-        // TODO This will naively turn a string into an arithmetic equation.
-        // In four-function mode, we can guarantee this is safe, because
-        // the only characters that can be entered are 0-9, and the four operators.
-        // test string: "22+4"
         let mut stack = vec![];
         let split_equation = self.equation.split_whitespace();
         split_equation.rev().for_each(|item| {
@@ -69,28 +72,18 @@ impl Calculator {
         numbers.pop().unwrap().to_string()
     }
 
-    // TODO: Test Cases for this
     fn postfix(&self, stack: &mut Vec<&str>) -> Vec<String> {
-        let mut end_of_scope = false;
-        let mut output = vec![];
+        let mut output: Vec<String> = vec![];
         let mut operators = vec![];
         while let Some(tmp) = stack.pop() {
             // tmp is the topmost element on our stack
             // need to check if it's a number
             if let Ok(_) = tmp.parse::<i32>() {
                 // it's a number
-                // the "( " is added to denote the start of an operator scope
-                let tmp = "( ".to_owned() + tmp + " ";
-                output.push(tmp);
-                if end_of_scope {
-                    // This is appended at the end of an operator scope
-                    output.push(" )".to_string());
-                    end_of_scope = false;
-                }
+                output.push(tmp.to_string());
             } else {
                 // its not a number
                 match tmp {
-                    // Start of a scope
                     "(" => {
                         operators.push(tmp);
                     }
@@ -102,10 +95,8 @@ impl Calculator {
                                 break;
                             }
                             output.push(op.to_owned() + " ");
-                            output.push(op.to_owned() + " ");
                             operator = operators.pop();
                         }
-                        // End of a scope
                     }
                     _ => {
                         // These are the operators
@@ -117,7 +108,6 @@ impl Calculator {
                             output.push(operators.pop().unwrap().to_string() + " ");
                         }
                         operators.push(tmp);
-                        end_of_scope = true;
                     }
                 }
             }
@@ -139,12 +129,24 @@ impl Calculator {
 // Tests for the Calculator struct
 #[cfg(test)]
 mod tests {
-    // TODO: Massive Tests
-    // TODO: Need to test postfix and calculate
+
+    use super::Calculator;
 
     #[test]
-    fn it_works() {
-        let result = 2 + 2;
-        assert_eq!(result, 4);
+    fn test_calculate_simple() {
+        let mut mock_calc = Calculator::new();
+        mock_calc.push_to_equation("22 + 4");
+        mock_calc.push_to_equation(" )");
+        let answer = mock_calc.calculate();
+        assert_eq!(answer, "26");
+    }
+
+    #[test]
+    fn test_calculate_complex() {
+        let mut mock_calc = Calculator::new();
+        mock_calc.push_to_equation("22 + 4 / 5 - 3");
+        mock_calc.push_to_equation(" )");
+        let answer = mock_calc.calculate();
+        assert_eq!(answer, "19");
     }
 }
