@@ -25,53 +25,55 @@ impl eframe::App for App {
             }
             ui.label(&self.calculator.equation);
             // TODO: Clean this up
-            if ui.button("0").clicked() {
-                self.calculator.push_to_equation("0");
-            }
-            if ui.button("1").clicked() {
-                self.calculator.push_to_equation("1");
-            }
-            if ui.button("2").clicked() {
-                self.calculator.push_to_equation("2");
-            }
-            if ui.button("3").clicked() {
-                self.calculator.push_to_equation("3");
-            }
-            if ui.button("4").clicked() {
-                self.calculator.push_to_equation("4");
-            }
-            if ui.button("5").clicked() {
-                self.calculator.push_to_equation("5");
-            }
-            if ui.button("6").clicked() {
-                self.calculator.push_to_equation("6");
-            }
-            if ui.button("7").clicked() {
-                self.calculator.push_to_equation("7");
-            }
-            if ui.button("8").clicked() {
-                self.calculator.push_to_equation("8");
-            }
-            if ui.button("9").clicked() {
-                self.calculator.push_to_equation("9");
-            }
-            if ui.button("+").clicked() {
-                self.calculator.push_to_equation(" + ");
-            }
-            if ui.button("-").clicked() {
-                self.calculator.push_to_equation(" - ");
-            }
-            if ui.button("*").clicked() {
-                self.calculator.push_to_equation(" * ");
-            }
-            if ui.button("/").clicked() {
-                self.calculator.push_to_equation(" / ");
-            }
-            if ui.button("=").clicked() {
-                self.calculator.push_to_equation(" )");
-                let answer = self.calculator.calculate();
-                self.calculator.push_to_equation(&answer);
-            }
+            ui.columns(4, |cols| {
+                if cols[0].button("0").clicked() {
+                    self.calculator.push_to_equation("0");
+                }
+                if cols[0].button("1").clicked() {
+                    self.calculator.push_to_equation("1");
+                }
+                if cols[0].button("4").clicked() {
+                    self.calculator.push_to_equation("5");
+                }
+                if cols[0].button("7").clicked() {
+                    self.calculator.push_to_equation("7");
+                }
+                if cols[1].button("2").clicked() {
+                    self.calculator.push_to_equation("2");
+                }
+                if cols[1].button("5").clicked() {
+                    self.calculator.push_to_equation("5");
+                }
+                if cols[1].button("8").clicked() {
+                    self.calculator.push_to_equation("8");
+                }
+                if cols[2].button("3").clicked() {
+                    self.calculator.push_to_equation("3");
+                }
+                if cols[2].button("6").clicked() {
+                    self.calculator.push_to_equation("6");
+                }
+                if cols[2].button("9").clicked() {
+                    self.calculator.push_to_equation("9");
+                }
+                if cols[3].button("=").clicked() {
+                    self.calculator.push_to_equation(" )");
+                    let answer = self.calculator.calculate();
+                    self.calculator.push_to_equation(&answer);
+                }
+                if cols[3].button("+").clicked() {
+                    self.calculator.push_to_equation(" + ");
+                }
+                if cols[3].button("-").clicked() {
+                    self.calculator.push_to_equation(" - ");
+                }
+                if cols[3].button("*").clicked() {
+                    self.calculator.push_to_equation(" * ");
+                }
+                if cols[3].button("/").clicked() {
+                    self.calculator.push_to_equation(" / ");
+                }
+            });
         });
     }
 }
