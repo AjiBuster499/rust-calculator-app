@@ -23,7 +23,10 @@ impl eframe::App for App {
                 // Exit Button
                 frame.close();
             }
-            ui.label(&self.calculator.equation);
+            if ui.button("Clear").clicked() {
+                self.calculator.clear();
+            }
+            ui.label(&self.calculator.display_equation);
             // TODO: Clean this up
             ui.columns(4, |cols| {
                 if cols[0].button("0").clicked() {
@@ -58,8 +61,7 @@ impl eframe::App for App {
                 }
                 if cols[3].button("=").clicked() {
                     self.calculator.push_to_equation(" )");
-                    let answer = self.calculator.calculate();
-                    self.calculator.push_to_equation(&answer);
+                    self.calculator.calculate();
                 }
                 if cols[3].button("+").clicked() {
                     self.calculator.push_to_equation(" + ");

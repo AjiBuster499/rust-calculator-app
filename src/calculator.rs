@@ -1,7 +1,8 @@
 #[derive(Debug, Default)]
 pub(crate) struct Calculator {
     /// The Equation container
-    pub(crate) equation: String,
+    equation: String,
+    pub display_equation: String,
 }
 
 impl Calculator {
@@ -15,6 +16,7 @@ impl Calculator {
             self.equation.push_str("( ");
         }
         self.equation.push_str(s);
+        self.display_equation.push_str(s);
     }
 
     // TODO: Parse floating points.
@@ -22,7 +24,7 @@ impl Calculator {
     /// In four-function mode, we can guarantee this is safe, because
     /// the only characters that can be entered are 0-9, and the four operators.
     /// test string: "22+4"
-    pub fn calculate(&mut self) -> String {
+    pub fn calculate(&mut self) {
         let mut stack = vec![];
         let split_equation = self.equation.split_whitespace();
         split_equation.rev().for_each(|item| {
@@ -37,7 +39,7 @@ impl Calculator {
         while let Some(tmp) = post_stack.pop() {
             // Remove that pesky whitespace
             let tmp = tmp.trim();
-            if let Ok(num) = tmp.parse::<i32>() {
+            if let Ok(num) = tmp.parse::<f32>() {
                 // Test to see if it's readable as a number, and if so,
                 // we push that to result.
                 numbers.push(num);
@@ -68,8 +70,8 @@ impl Calculator {
             }
         }
 
-        self.equation.clear();
-        numbers.pop().unwrap().to_string()
+        self.equation = numbers.pop().unwrap().to_string();
+        self.display_equation = self.equation.clone();
     }
 
     fn postfix(&self, stack: &mut Vec<&str>) -> Vec<String> {
@@ -78,7 +80,7 @@ impl Calculator {
         while let Some(tmp) = stack.pop() {
             // tmp is the topmost element on our stack
             // need to check if it's a number
-            if let Ok(_) = tmp.parse::<i32>() {
+            if let Ok(_) = tmp.parse::<f32>() {
                 // it's a number
                 output.push(tmp.to_string());
             } else {
@@ -124,6 +126,10 @@ impl Calculator {
             _ => -1,
         }
     }
+    pub fn clear(&mut self) {
+        self.equation.clear();
+        self.display_equation.clear();
+    }
 }
 
 // Tests for the Calculator struct
@@ -137,8 +143,8 @@ mod tests {
         let mut mock_calc = Calculator::new();
         mock_calc.push_to_equation("22 + 4");
         mock_calc.push_to_equation(" )");
-        let answer = mock_calc.calculate();
-        assert_eq!(answer, "26");
+        mock_calc.calculate();
+        assert_eq!(mock_calc.display_equation, "26");
     }
 
     #[test]
@@ -146,7 +152,7 @@ mod tests {
         let mut mock_calc = Calculator::new();
         mock_calc.push_to_equation("22 + 4 / 5 - 3");
         mock_calc.push_to_equation(" )");
-        let answer = mock_calc.calculate();
-        assert_eq!(answer, "19");
+        mock_calc.calculate();
+        assert_eq!(mock_calc.display_equation, "19.8");
     }
 }
