@@ -19,15 +19,38 @@ impl App {
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
-            if ui.button("Quit").clicked() {
-                // Exit Button
-                frame.close();
-            }
-            if ui.button("Clear").clicked() {
-                self.calculator.clear();
-            }
-            ui.label(&self.calculator.display_equation);
+            ui.with_layout(egui::Layout::left_to_right(egui::Align::TOP), |ui| {
+                if ui.button("Quit").clicked() {
+                    // Exit Button
+                    frame.close();
+                }
+                if ui.button("Clear").clicked() {
+                    self.calculator.clear();
+                }
+                if ui.button("Scientific").clicked() {
+                    self.calculator.scientific = !self.calculator.scientific;
+                }
+                ui.label(&self.calculator.display_equation);
+            });
             // TODO: Clean this up
+            if self.calculator.scientific {
+                // Implement Scientific Functions here.
+                // TODO: Scientific Buttons
+                ui.columns(4, |cols| {
+                    if cols[0].button("log").clicked() {
+                        // TODO: Logarithm (base-10)
+                    }
+                    if cols[1].button("ln").clicked() {
+                        // TODO: natural logarithm
+                    }
+                    if cols[2].button("sin").clicked() {
+                        // TODO: Sine
+                    }
+                    if cols[3].button("^").clicked() {
+                        // TODO: Exponents
+                    }
+                });
+            }
             ui.columns(4, |cols| {
                 if cols[0].button("7").clicked() {
                     self.calculator.push_to_equation("7");

@@ -3,6 +3,7 @@ pub(crate) struct Calculator {
     /// The Equation container
     equation: String,
     pub display_equation: String,
+    pub scientific: bool,
 }
 
 impl Calculator {
