@@ -56,7 +56,7 @@ impl eframe::App for App {
                     self.calculator.push_to_equation("7");
                 }
                 if cols[0].button("4").clicked() {
-                    self.calculator.push_to_equation("5");
+                    self.calculator.push_to_equation("4");
                 }
                 if cols[0].button("1").clicked() {
                     self.calculator.push_to_equation("1");
