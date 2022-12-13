@@ -1,7 +1,5 @@
 use app::App;
 
-extern crate eframe;
-
 mod app;
 mod calculator;
 mod operators;

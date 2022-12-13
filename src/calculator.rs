@@ -20,7 +20,6 @@ impl Calculator {
         self.display_equation.push_str(s);
     }
 
-    // TODO: Parse floating points.
     /// This will naively turn a string into an arithmetic equation.
     /// In four-function mode, we can guarantee this is safe, because
     /// the only characters that can be entered are 0-9, and the four operators.
@@ -48,25 +47,16 @@ impl Calculator {
                 // The Err should not be of much concern, because it just means that
                 // it's an operator. And it should only be an operator, because we excluded
                 // the parentheses in post_stack
-                let sum;
                 // TODO: Le Unwrap
                 let num = numbers.pop().unwrap();
-                match tmp {
-                    "+" => {
-                        sum = numbers.pop().unwrap() + num;
-                    }
-                    "-" => {
-                        sum = numbers.pop().unwrap() - num;
-                    }
-                    "*" => {
-                        sum = numbers.pop().unwrap() * num;
-                    }
-                    "/" => {
-                        sum = numbers.pop().unwrap() / num;
-                    }
+                let sum = match tmp {
+                    "+" => numbers.pop().unwrap() + num,
+                    "-" => numbers.pop().unwrap() - num,
+                    "*" => numbers.pop().unwrap() * num,
+                    "/" => numbers.pop().unwrap() / num,
                     // Check that this is guaranteed
                     _ => unreachable!(),
-                }
+                };
                 numbers.push(sum);
             }
         }
@@ -81,7 +71,7 @@ impl Calculator {
         while let Some(tmp) = stack.pop() {
             // tmp is the topmost element on our stack
             // need to check if it's a number
-            if let Ok(_) = tmp.parse::<f32>() {
+            if tmp.parse::<f32>().is_ok() {
                 // it's a number
                 output.push(tmp.to_string());
             } else {
@@ -91,7 +81,6 @@ impl Calculator {
                         operators.push(tmp);
                     }
                     ")" => {
-                        // TODO: There should be a better way to do this
                         let mut operator = operators.pop();
                         while let Some(op) = operator {
                             if op == "(" {
@@ -121,9 +110,12 @@ impl Calculator {
     }
 
     fn pemdas(&self, op: String) -> i8 {
+        // TODO: Add in Scientific functions
+        // (log, ln, sin, exp)
         match op.as_str() {
-            "+" | "-" => 1,
-            "*" | "/" => 2,
+            "^" => 1,
+            "+" | "-" => 2,
+            "*" | "/" => 3,
             _ => -1,
         }
     }
@@ -155,5 +147,13 @@ mod tests {
         mock_calc.push_to_equation(" )");
         mock_calc.calculate();
         assert_eq!(mock_calc.display_equation, "19.8");
+    }
+
+    #[test]
+    fn test_paren_prefix() {
+        let mut mock_calc = Calculator::new();
+        mock_calc.push_to_equation("4 ( 5 + 7 ) )");
+        mock_calc.calculate();
+        assert_eq!(mock_calc.display_equation, "48");
     }
 }
