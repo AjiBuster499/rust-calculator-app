@@ -14,7 +14,6 @@ impl App {
     }
 }
 
-// TODO: Layout for Calculator
 impl eframe::App for App {
     fn update(&mut self, ctx: &egui::Context, frame: &mut eframe::Frame) {
         egui::CentralPanel::default().show(ctx, |ui| {
@@ -39,19 +38,19 @@ impl eframe::App for App {
                     // Needs a way to close the parenthesis
                     if cols[0].button("log").clicked() {
                         // TODO: Logarithm (base-10)
-                        self.calculator.push_to_equation("log(");
+                        self.calculator.push_to_equation("log( ");
                     }
                     if cols[1].button("ln").clicked() {
                         // TODO: natural logarithm
-                        self.calculator.push_to_equation("ln(");
+                        self.calculator.push_to_equation("ln( ");
                     }
                     if cols[2].button("sin").clicked() {
                         // TODO: Sine
-                        self.calculator.push_to_equation("sin(");
+                        self.calculator.push_to_equation("sin( ");
                     }
                     if cols[3].button("^").clicked() {
                         // TODO: Exponents
-                        self.calculator.push_to_equation("^(");
+                        self.calculator.push_to_equation("^ ( ");
                     }
                 });
             }
