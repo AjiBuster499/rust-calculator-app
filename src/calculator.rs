@@ -44,6 +44,7 @@ impl Calculator {
         let mut numbers = vec![];
         while let Some(tmp) = post_stack.pop() {
             // Remove that pesky whitespace
+            // I love this comment.
             let tmp = tmp.trim();
             if let Ok(num) = tmp.parse::<f32>() {
                 // Test to see if it's readable as a number, and if so,
@@ -62,6 +63,7 @@ impl Calculator {
                     "/" => numbers.pop().unwrap() / num,
                     "log" => f32::log10(num),
                     "ln" => f32::ln(num),
+                    "^" => numbers.pop().unwrap().powf(num),
                     // Check that this is guaranteed
                     _ => unreachable!(),
                 };
@@ -126,9 +128,9 @@ impl Calculator {
         // TODO: Add in Scientific functions
         // (log, ln, sin, exp)
         match op.as_str() {
-            "^" | "log" | "ln" => 1,
-            "+" | "-" => 2,
-            "*" | "/" => 3,
+            "+" | "-" => 1,
+            "*" | "/" => 2,
+            "^" | "log" | "ln" => 3,
             _ => -1,
         }
     }
@@ -147,18 +149,18 @@ mod tests {
 
     #[test]
     fn test_calculate_simple() {
-        let mut mock_calc = Calculator::new();
-        mock_calc.push_to_equation("22 + 4 )");
-        mock_calc.calculate();
-        assert_eq!(mock_calc.display_equation, "26");
+        let mut calc = Calculator::new();
+        calc.push_to_equation("22 + 4 )");
+        calc.calculate();
+        assert_eq!(calc.display_equation, "26");
     }
 
     #[test]
     fn test_calculate_complex() {
-        let mut mock_calc = Calculator::new();
-        mock_calc.push_to_equation("22 + 4 / 5 - 3 )");
-        mock_calc.calculate();
-        assert_eq!(mock_calc.display_equation, "19.8");
+        let mut calc = Calculator::new();
+        calc.push_to_equation("22 + 4 / 5 - 3 )");
+        calc.calculate();
+        assert_eq!(calc.display_equation, "19.8");
     }
 
     #[test]
@@ -167,20 +169,46 @@ mod tests {
     /// equate to multiplication by default. This may be added in the future, hence this test
     /// remains.
     fn test_paren_prefix() {
-        let mut mock_calc = Calculator::new();
-        mock_calc.push_to_equation("4 ( 5 + 7 ) )");
-        mock_calc.calculate();
-        assert_eq!(mock_calc.display_equation, "48");
+        let mut calc = Calculator::new();
+        calc.push_to_equation("4 ( 5 + 7 ) )");
+        calc.calculate();
+        assert_eq!(calc.display_equation, "48");
     }
 
     #[test]
     fn test_logarithm() {
-        let mut mock_calc = Calculator::new();
-        mock_calc.push_to_equation("log ( 100 ) )");
-        mock_calc.calculate();
-        assert_eq!(mock_calc.display_equation, "2");
+        let mut calc = Calculator::new();
+        calc.push_to_equation("log ( 100 ) )");
+        calc.calculate();
+        assert_eq!(calc.display_equation, "2");
     }
 
     #[test]
-    fn test_natural_logarithm() {}
+    fn test_logarithm_complex() {
+        let mut calc = Calculator::new();
+        calc.push_to_equation("5 * log ( 100 ) + 30 / 2 )");
+        calc.calculate();
+        assert_eq!(
+            calc.display_equation,
+            (5f32 * f32::log10(100f32) + 30f32 / 2f32)
+                .to_string()
+                .as_str()
+        );
+    }
+
+    #[test]
+    fn test_natural_logarithm() {
+        let mut calc = Calculator::new();
+        calc.push_to_equation("ln ( 100 ) )");
+        calc.calculate();
+        assert_eq!(calc.display_equation, f32::ln(100f32).to_string().as_str());
+    }
+
+    #[test]
+    fn test_exponent() {
+        let mut calc = Calculator::new();
+        calc.push_to_equation("2 ^ ( 10 ) )");
+        calc.calculate();
+        assert_eq!(calc.display_equation, "1024");
+    }
 }
