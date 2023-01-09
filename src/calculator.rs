@@ -57,6 +57,7 @@ impl Calculator {
                 // TODO: Le Unwrap
                 let num = numbers.pop().unwrap();
                 let sum = match tmp {
+                    // TODO: Try and condense maybe?
                     "+" => numbers.pop().unwrap() + num,
                     "-" => numbers.pop().unwrap() - num,
                     "*" => numbers.pop().unwrap() * num,
@@ -125,12 +126,12 @@ impl Calculator {
     ///     3. Multiplication/Division
     ///     4. Addition/Subtraction
     fn pemdas(&self, op: String) -> i8 {
-        // TODO: Add in Scientific functions
-        // (log, ln, sin, exp)
         match op.as_str() {
             "+" | "-" => 1,
             "*" | "/" => 2,
             "^" | "log" | "ln" => 3,
+            // Is this truly correct order of operations?
+            "sin" | "cos" | "tan" => 4,
             _ => -1,
         }
     }
