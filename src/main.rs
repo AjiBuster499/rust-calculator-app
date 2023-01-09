@@ -2,7 +2,6 @@ use app::App;
 
 mod app;
 mod calculator;
-mod operators;
 
 fn main() {
     let native_options = eframe::NativeOptions::default();

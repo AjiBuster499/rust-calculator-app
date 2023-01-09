@@ -37,11 +37,9 @@ impl eframe::App for App {
                 ui.columns(4, |cols| {
                     // Needs a way to close the parenthesis
                     if cols[0].button("log").clicked() {
-                        // TODO: Logarithm (base-10)
                         self.calculator.push_to_equation("log ( ");
                     }
                     if cols[1].button("ln").clicked() {
-                        // TODO: natural logarithm
                         self.calculator.push_to_equation("ln ( ");
                     }
                     if cols[2].button("sin").clicked() {
@@ -49,7 +47,6 @@ impl eframe::App for App {
                         self.calculator.push_to_equation("sin ( ");
                     }
                     if cols[3].button("^").clicked() {
-                        // TODO: Exponents
                         self.calculator.push_to_equation("^ ( ");
                     }
                 });
