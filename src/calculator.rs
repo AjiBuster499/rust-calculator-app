@@ -120,7 +120,7 @@ impl Calculator {
         output
     }
 
-    /// Calculates order of operations, following PEMDAS:
+    /// Calculates order of operations, following PEMDAS
     ///     1. Parenthesis
     ///     2. Exponents
     ///     3. Multiplication/Division
@@ -194,6 +194,19 @@ mod tests {
             (5f32 * f32::log10(100f32) + 30f32 / 2f32)
                 .to_string()
                 .as_str()
+        );
+    }
+
+    #[test]
+    fn test_logarithm_with_number_in_front() {
+        let mut calc = Calculator::new();
+        calc.push_to_equation("2 + 0 )");
+        calc.calculate();
+        calc.push_to_equation("log ( 100 ) )");
+        calc.calculate();
+        assert_eq!(
+            calc.display_equation,
+            f32::log10(100f32).to_string().as_str()
         );
     }
 
