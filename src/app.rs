@@ -37,17 +37,17 @@ impl eframe::App for App {
                 ui.columns(4, |cols| {
                     // Needs a way to close the parenthesis
                     if cols[0].button("log").clicked() {
-                        self.calculator.push_to_equation("log ( ");
+                        self.calculator.push_to_equation(" log ( ");
                     }
                     if cols[1].button("ln").clicked() {
-                        self.calculator.push_to_equation("ln ( ");
+                        self.calculator.push_to_equation(" ln ( ");
                     }
                     if cols[2].button("sin").clicked() {
                         // TODO: Sine
-                        self.calculator.push_to_equation("sin ( ");
+                        self.calculator.push_to_equation(" sin ( ");
                     }
                     if cols[3].button("^").clicked() {
-                        self.calculator.push_to_equation("^ ( ");
+                        self.calculator.push_to_equation(" ^ ( ");
                     }
                 });
             }
